@@ -1,7 +1,10 @@
 package ir.maktab;
 
+import ir.maktab.domains.Comment;
+import ir.maktab.services.CommentService;
 import ir.maktab.services.PostService;
 import ir.maktab.services.UserService;
+import ir.maktab.services.impl.CommentServiceImpl;
 import ir.maktab.services.impl.PostServiceImpl;
 import ir.maktab.services.impl.UserServiceImpl;
 import ir.maktab.controller.menu.Menu;
@@ -10,6 +13,7 @@ public class MyApp {
     private static Scan sc = Scan.getInstance();
     private static UserService userService = new UserServiceImpl();
     private static PostService postService = new PostServiceImpl();
+    private static CommentService commentService = new CommentServiceImpl();
 
     public static PostService getPostService() {
         return postService;
@@ -17,6 +21,10 @@ public class MyApp {
 
     public static UserService getUserService() {
         return userService;
+    }
+
+    public static CommentService getCommentService() {
+        return commentService;
     }
 
     public static Scan getSc() {

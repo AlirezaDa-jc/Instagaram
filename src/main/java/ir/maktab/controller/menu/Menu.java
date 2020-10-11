@@ -2,6 +2,7 @@ package ir.maktab.controller.menu;
 
 import ir.maktab.MyApp;
 import ir.maktab.Scan;
+import ir.maktab.services.CommentService;
 import ir.maktab.services.PostService;
 import ir.maktab.services.UserService;
 
@@ -10,11 +11,13 @@ public class Menu {
     private static Scan sc;
     private UserService userService;
     private PostService postService;
+    private CommentService commentService;
 
     public Menu() {
         sc = MyApp.getSc();
         userService = MyApp.getUserService();
         postService = MyApp.getPostService();
+        commentService = MyApp.getCommentService();
     }
 
 
@@ -35,43 +38,51 @@ public class Menu {
         System.out.println("To See Your Followers Press 7");
         System.out.println("To See Ones You Follow Press 8");
         System.out.println("To See Your Posts Press 9");
+        System.out.println("To See Posts Of One Of Your Followings Press 10");
     }
 
 
     public void function() {
         boolean flag = true;
         while (flag) {
-            display();
-            setChoice();
-            switch (choice) {
-                case 1:
-                    userService.displayFollowingsPosts();
-                    break;
-                case 2:
-                    userService.follow();
-                    break;
-                case 4:
-                    postService.insert();
-                    break;
-                case 5:
-                    postService.displayLikedPosts();
-                    break;
-                case 6:
-                    postService.displayCommentedPosts();
-                    break;
-                case 7:
-                    userService.displayFollowers();
-                    break;
-                case 8:
-                    userService.displayFollowings();
-                    break;
-                case 9:
-                    postService.displayUsersPosts();
-                    break;
-                case 15:
-                    userService.exit();
-                    flag = false;
-                    break;
+            try {
+                display();
+                setChoice();
+                switch (choice) {
+                    case 1:
+                        userService.displayDailyPosts();
+                        break;
+                    case 2:
+                        userService.follow();
+                        break;
+                    case 4:
+                        postService.insert();
+                        break;
+                    case 5:
+                        postService.displayLikedPosts();
+                        break;
+                    case 6:
+                        commentService.displayCommentedPosts();
+                        break;
+                    case 7:
+                        userService.displayFollowers();
+                        break;
+                    case 8:
+                        userService.displayFollowings();
+                        break;
+                    case 9:
+                        postService.displayUsersPosts();
+                        break;
+                    case 10:
+                        userService.displayFollowingsPosts();
+                        break;
+                    case 15:
+                        userService.exit();
+                        flag = false;
+                        break;
+                }
+            } catch (NullPointerException ex) {
+                System.out.println("Invalid Inputs!");
             }
         }
     }

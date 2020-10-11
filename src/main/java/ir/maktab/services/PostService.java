@@ -8,7 +8,7 @@ public interface PostService extends BaseService<Post,Long> {
 
     void displayLikedPosts();
 
-    void displayCommentedPosts();
+//    void displayCommentedPosts();
 
     void displayUsersPosts();
 }

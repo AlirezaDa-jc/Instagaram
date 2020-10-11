@@ -24,7 +24,7 @@ public class Comment extends BaseEntity<Long> {
 
     public void setUser(User user) {
         this.user = user;
-        user.addPostCommented(this);
+//        user.addPostCommented(this);
     }
 
     public Post getPost() {

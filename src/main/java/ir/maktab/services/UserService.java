@@ -4,7 +4,7 @@ import ir.maktab.base.services.BaseService;
 import ir.maktab.domains.User;
 
 public interface UserService extends BaseService<User,Long> {
-    void displayFollowingsPosts();
+    void displayDailyPosts();
 
     boolean signIn();
 
@@ -21,4 +21,6 @@ public interface UserService extends BaseService<User,Long> {
     void displayFollowers();
 
     void displayFollowings();
+
+    void displayFollowingsPosts();
 }

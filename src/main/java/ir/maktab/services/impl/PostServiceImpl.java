@@ -50,21 +50,21 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
         }
     }
 
-    @Override
-    public void displayCommentedPosts() {
-        User u = UserServiceImpl.getUser();
-        Set<Comment> comments = u.getComments();
-        if(comments != null){
-            int i = 0;
-            Iterator<Comment> it = comments.iterator();
-            while(it.hasNext() && i < 5){
-                System.out.println(it.next().getPost());
-                i++;
-            }
-        }else{
-            System.out.println("No Post Commented");
-        }
-    }
+//    @Override
+//    public void displayCommentedPosts() {
+//        User u = UserServiceImpl.getUser();
+//        Set<Comment> comments = u.getComments();
+//        if(comments != null){
+//            int i = 0;
+//            Iterator<Comment> it = comments.iterator();
+//            while(it.hasNext() && i < 5){
+//                System.out.println(it.next().getPost());
+//                i++;
+//            }
+//        }else{
+//            System.out.println("No Post Commented");
+//        }
+//    }
 
     @Override
     public void displayUsersPosts() {

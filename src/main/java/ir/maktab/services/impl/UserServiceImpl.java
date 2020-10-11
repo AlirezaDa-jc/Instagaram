@@ -14,14 +14,39 @@ import ir.maktab.services.UserService;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository> implements UserService {
     private static User user = new User();
     private Scan sc;
-
+    private  PostService postService;
+    private Consumer<Post> addLikeOrComment;
     public UserServiceImpl() {
         UserRepository repository = new UserRepositoryImpl();
         sc = MyApp.getSc();
+        postService = MyApp.getPostService();
+        //Consumer!
+        addLikeOrComment = (c) -> {
+            System.out.println(c);
+            String choice = sc.getString("Comment Or Like Or Both Or Pass: ").toUpperCase();
+            switch (choice) {
+                case "LIKE":
+                    c.addLike(user);
+                    user.addPostLiked(c);
+                    break;
+                case "COMMENT":
+                    addCommentToPost(c);
+                    break;
+                case "BOTH":
+                    c.addLike(user);
+                    addCommentToPost(c);
+                    break;
+                default:
+            }
+            if (!choice.equals("PASS")) {
+                postService.saveOrUpdate(c);
+            }
+        };
         super.setRepository(repository);
     }
 
@@ -57,6 +82,15 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
         iteratingUsersSet(followings);
     }
 
+    @Override
+    public void displayFollowingsPosts() {
+        displayFollowings();
+        String userName = sc.getString("Username: ");
+        User user = baseRepository.findByUserName(userName);
+        user.getPosts()
+                .forEach(addLikeOrComment);
+    }
+
     private void iteratingUsersSet(Set<User> users) {
         if (users != null) {
             users.forEach(System.out::println);
@@ -80,35 +114,13 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
     }
 
     @Override
-    public void displayFollowingsPosts() {
+    public void displayDailyPosts() {
         Set<User> followings = user.getFollowings();
-        PostService postService = MyApp.getPostService();
-
         followings.stream()
                 .map(User::getPosts)
                 .forEach(posts -> posts.stream()
                         .filter((c) -> c.getDate().compareTo(user.getDate()) > 0)
-                        .forEach((c) -> {
-                            System.out.println(c);
-                            String choice = sc.getString("Comment Or Like Or Both Or Pass: ").toUpperCase();
-                            switch (choice) {
-                                case "LIKE":
-                                    c.addLike(user);
-                                    user.addPostLiked(c);
-                                    break;
-                                case "COMMENT":
-                                    addCommentToPost(c);
-                                    break;
-                                case "BOTH":
-                                    c.addLike(user);
-                                    addCommentToPost(c);
-                                    break;
-                                default:
-                            }
-                            if (!choice.equals("PASS")) {
-                                postService.saveOrUpdate(c);
-                            }
-                        }));
+                        .forEach(addLikeOrComment));
     }
 
     private void addCommentToPost(Post c) {
