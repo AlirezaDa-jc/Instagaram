@@ -13,7 +13,7 @@ public class Post extends BaseEntity<Long> {
     @Column(name = "content", nullable = false)
     private String content;
     @Column(name = "date", nullable = false, updatable = false)
-    Date date = new Date();
+    private Date date = new Date();
     @ManyToOne
     @JoinColumn(name = "publisherid")
     private User user;
@@ -78,8 +78,8 @@ public class Post extends BaseEntity<Long> {
     }
 
     public void addComment(Comment comment) {
+//        comment.setPost(this);
         comments.add(comment);
-        comment.setPost(this);
     }
 
     @Override
@@ -88,9 +88,8 @@ public class Post extends BaseEntity<Long> {
                 + content + '\n' +
                 "date: " + date +
                 "\n User: " + user.getUserName() +
-                "\n likes: " + likesUser.size() + "\t" +
-                likesUser.iterator().next().getUserName() +
+                "\n likes: " + likesUser.size()+
                 "\n comments: " + comments.size() + "\t" + comments +
-                '\n';
+                '\n'+ '\n';
     }
 }

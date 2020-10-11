@@ -12,6 +12,7 @@ import ir.maktab.services.PostService;
 import ir.maktab.services.UserService;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Set;
 
 public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository> implements UserService {
@@ -33,7 +34,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
     }
 
     public void setUser(User user) {
-        this.user = user;
+        UserServiceImpl.user = user;
     }
 
     @Override
@@ -42,6 +43,26 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
         String password = sc.getString("Password: ");
         user = baseRepository.userLogin(userName, password);
         return user != null;
+    }
+
+    @Override
+    public void displayFollowers() {
+        Set<User> followers = user.getFollowers();
+        iteratingUsersSet(followers);
+    }
+
+    @Override
+    public void displayFollowings() {
+        Set<User> followings = user.getFollowings();
+        iteratingUsersSet(followings);
+    }
+
+    private void iteratingUsersSet(Set<User> users) {
+        if (users != null) {
+            users.forEach(System.out::println);
+        } else {
+            System.out.println("No Post Commented");
+        }
     }
 
     @Override
@@ -62,6 +83,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
     public void displayFollowingsPosts() {
         Set<User> followings = user.getFollowings();
         PostService postService = MyApp.getPostService();
+
         followings.stream()
                 .map(User::getPosts)
                 .forEach(posts -> posts.stream()
@@ -69,9 +91,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
                         .forEach((c) -> {
                             System.out.println(c);
                             String choice = sc.getString("Comment Or Like Or Both Or Pass: ").toUpperCase();
-                            switch (choice){
+                            switch (choice) {
                                 case "LIKE":
                                     c.addLike(user);
+                                    user.addPostLiked(c);
                                     break;
                                 case "COMMENT":
                                     addCommentToPost(c);
@@ -82,17 +105,19 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
                                     break;
                                 default:
                             }
-                            postService.saveOrUpdate(c);
+                            if (!choice.equals("PASS")) {
+                                postService.saveOrUpdate(c);
+                            }
                         }));
-
     }
 
     private void addCommentToPost(Post c) {
         Comment comment = new Comment();
         String content = sc.getString("Comment: ");
         comment.setComment(content);
-        user.addPostCommented(comment);
-        c.addComment(comment);
+        comment.setUser(user);
+        comment.setPost(c);
+        System.out.println(comment);
     }
 
 

@@ -4,7 +4,7 @@ import ir.maktab.services.PostService;
 import ir.maktab.services.UserService;
 import ir.maktab.services.impl.PostServiceImpl;
 import ir.maktab.services.impl.UserServiceImpl;
-import ir.maktab.services.menu.Menu;
+import ir.maktab.controller.menu.Menu;
 
 public class MyApp {
     private static Scan sc = Scan.getInstance();

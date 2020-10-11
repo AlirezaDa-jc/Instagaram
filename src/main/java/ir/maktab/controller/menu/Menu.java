@@ -1,4 +1,4 @@
-package ir.maktab.services.menu;
+package ir.maktab.controller.menu;
 
 import ir.maktab.MyApp;
 import ir.maktab.Scan;
@@ -34,6 +34,7 @@ public class Menu {
         System.out.println("To See Posts You Commented Press 6");
         System.out.println("To See Your Followers Press 7");
         System.out.println("To See Ones You Follow Press 8");
+        System.out.println("To See Your Posts Press 9");
     }
 
 
@@ -53,9 +54,21 @@ public class Menu {
                     postService.insert();
                     break;
                 case 5:
-                    postService.getLikedPosts();
+                    postService.displayLikedPosts();
+                    break;
+                case 6:
+                    postService.displayCommentedPosts();
+                    break;
+                case 7:
+                    userService.displayFollowers();
+                    break;
+                case 8:
+                    userService.displayFollowings();
                     break;
                 case 9:
+                    postService.displayUsersPosts();
+                    break;
+                case 15:
                     userService.exit();
                     flag = false;
                     break;

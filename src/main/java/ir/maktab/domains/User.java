@@ -17,7 +17,7 @@ public class User extends BaseEntity<Long> {
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "last_online")
-    Date date;
+    private Date date;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Post> posts = new HashSet<>();
 
@@ -91,9 +91,12 @@ public class User extends BaseEntity<Long> {
         postsLiked.add(post);
     }
 
+    /*
+    Ask!
+     */
     public void addPostCommented(Comment comment) {
+////        comment.setUser(this);
         comments.add(comment);
-        comment.setUser(this);
     }
 
     public Set<Comment> getComments() {
@@ -128,10 +131,11 @@ public class User extends BaseEntity<Long> {
 
     @Override
     public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", userName='" + userName + '\'' +
-                ", posts ='" + posts.size() + '\'' +
-                '}';
+        return "User: \n" +
+                "name: " + name + "\t" +
+                "userName: " + userName + '\t' +
+                "posts: " + posts.size() + '\t' +
+                "Followers: " + followers.size() + '\t'+
+                "Followings: " + followings.size() + '\t';
     }
 }

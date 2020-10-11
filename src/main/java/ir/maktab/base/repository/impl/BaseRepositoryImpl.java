@@ -16,10 +16,11 @@ public abstract class BaseRepositoryImpl<E, PK extends Number> implements BaseRe
     @Override
     public E saveOrUpdate(E e) {
         em.getTransaction().begin();
-        if (em.contains(e))
+        if (em.contains(e)) {
             em.merge(e);
-        else
+        } else {
             em.persist(e);
+        }
         em.getTransaction().commit();
         return e;
     }

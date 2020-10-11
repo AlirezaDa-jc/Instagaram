@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface PostRepository extends BaseRepository<Post,Long> {
     List<Post> findPostsUserLiked(User u);
+
+    List<Post> findPostsUserCommented(User u);
 }

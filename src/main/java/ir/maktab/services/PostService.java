@@ -6,5 +6,9 @@ import ir.maktab.domains.Post;
 public interface PostService extends BaseService<Post,Long> {
     void insert();
 
-    void getLikedPosts();
+    void displayLikedPosts();
+
+    void displayCommentedPosts();
+
+    void displayUsersPosts();
 }

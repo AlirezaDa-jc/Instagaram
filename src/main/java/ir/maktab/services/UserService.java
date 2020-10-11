@@ -17,4 +17,8 @@ public interface UserService extends BaseService<User,Long> {
     void exit();
 
     boolean login();
+
+    void displayFollowers();
+
+    void displayFollowings();
 }

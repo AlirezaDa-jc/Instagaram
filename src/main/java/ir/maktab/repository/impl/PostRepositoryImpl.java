@@ -5,6 +5,7 @@ import ir.maktab.domains.Post;
 import ir.maktab.domains.User;
 import ir.maktab.repository.PostRepository;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class PostRepositoryImpl extends BaseRepositoryImpl<Post,Long> implements PostRepository {
@@ -15,6 +16,9 @@ public class PostRepositoryImpl extends BaseRepositoryImpl<Post,Long> implements
 
     @Override
     public List<Post> findPostsUserLiked(User u) {
+        /*
+        Native
+         */
 //        em.getTransaction().begin();
 //        TypedQuery<Long> query = em.createQuery(
 //                "SELECT u FROM user_like u where u.user_id:name",
@@ -29,6 +33,23 @@ public class PostRepositoryImpl extends BaseRepositoryImpl<Post,Long> implements
 //        }
 //        em.getTransaction().rollback();
         //Todo
+        return null;
+    }
+
+    @Override
+    public List<Post> findPostsUserCommented(User u) {
+//        em.getTransaction().begin();
+//        TypedQuery<Post> query = em.createQuery(
+//                "SELECT u.post FROM Comment u where u.id:name",
+//                Post.class);
+//
+//        query.setParameter("name", u.getId());
+//        if (query.getResultList().size() > 0) {
+//            List<Post> resultList = query.getResultList();
+//            em.getTransaction().commit();
+//            return resultList;
+//        }
+//        em.getTransaction().rollback();
         return null;
     }
 }
