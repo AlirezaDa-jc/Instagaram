@@ -1,11 +1,10 @@
-package ir.maktab.repository.impl;
+package ir.maktab.Dao.impl;
 
 import ir.maktab.base.repository.impl.BaseRepositoryImpl;
 import ir.maktab.domains.Post;
 import ir.maktab.domains.User;
-import ir.maktab.repository.PostRepository;
+import ir.maktab.Dao.PostRepository;
 
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class PostRepositoryImpl extends BaseRepositoryImpl<Post,Long> implements PostRepository {

@@ -1,10 +1,10 @@
-package ir.maktab.repository.impl;
+package ir.maktab.Dao.impl;
 
 import ir.maktab.base.repository.impl.BaseRepositoryImpl;
 import ir.maktab.domains.Comment;
 import ir.maktab.domains.Post;
 import ir.maktab.domains.User;
-import ir.maktab.repository.CommentRepository;
+import ir.maktab.Dao.CommentRepository;
 
 import javax.persistence.TypedQuery;
 import java.util.List;

@@ -3,13 +3,11 @@ package ir.maktab.services.impl;
 import ir.maktab.MyApp;
 import ir.maktab.Scan;
 import ir.maktab.base.services.impl.BaseServiceImpl;
-import ir.maktab.domains.Comment;
 import ir.maktab.domains.Post;
 import ir.maktab.domains.User;
-import ir.maktab.repository.PostRepository;
-import ir.maktab.repository.impl.PostRepositoryImpl;
+import ir.maktab.Dao.PostRepository;
+import ir.maktab.Dao.impl.PostRepositoryImpl;
 import ir.maktab.services.PostService;
-import ir.maktab.services.UserService;
 
 import java.util.Date;
 import java.util.Iterator;

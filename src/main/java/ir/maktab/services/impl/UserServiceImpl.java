@@ -6,13 +6,12 @@ import ir.maktab.base.services.impl.BaseServiceImpl;
 import ir.maktab.domains.Comment;
 import ir.maktab.domains.Post;
 import ir.maktab.domains.User;
-import ir.maktab.repository.UserRepository;
-import ir.maktab.repository.impl.UserRepositoryImpl;
+import ir.maktab.Dao.UserRepository;
+import ir.maktab.Dao.impl.UserRepositoryImpl;
 import ir.maktab.services.PostService;
 import ir.maktab.services.UserService;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Consumer;
 

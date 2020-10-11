@@ -1,4 +1,4 @@
-package ir.maktab.repository;
+package ir.maktab.Dao;
 
 import ir.maktab.base.repository.BaseRepository;
 import ir.maktab.domains.User;

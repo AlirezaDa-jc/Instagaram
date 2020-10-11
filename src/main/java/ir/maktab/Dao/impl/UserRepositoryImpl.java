@@ -1,8 +1,8 @@
-package ir.maktab.repository.impl;
+package ir.maktab.Dao.impl;
 
 import ir.maktab.base.repository.impl.BaseRepositoryImpl;
 import ir.maktab.domains.User;
-import ir.maktab.repository.UserRepository;
+import ir.maktab.Dao.UserRepository;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
