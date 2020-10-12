@@ -52,6 +52,8 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                File file = new File("output.jpg");
+                file.delete();
             }
         };
         addLikeOrComment = (c) -> {
@@ -74,8 +76,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
             if (!choice.equals("PASS")) {
                 baseRepository.saveOrUpdate(c);
             }
-            File file = new File("output.jpg");
-            file.delete();
+
         };
         super.setRepository(postRepository);
     }
