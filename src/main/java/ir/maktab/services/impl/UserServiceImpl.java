@@ -56,6 +56,51 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
         iteratingUsersSet(followings);
     }
 
+    @Override
+    public void edit() {
+        String choice = sc.getString("Choose The One You Want To Edit:(name,password,username) : ").toLowerCase();
+        switch (choice){
+            case "username":
+                updateUserName();
+                break;
+            case "name":
+                updateName();
+                break;
+            case "password":
+                updatePassword();
+                break;
+            default:
+                System.out.println("Invalid Input!");
+        }
+    }
+
+    private void updatePassword() {
+        String currentPassword = sc.getString("Current Password: ");
+        if(!currentPassword.equals(user.getPassword())){
+            System.out.println("Wrong Password");
+            return;
+        }
+        String password = sc.getString("Password: ");
+        user.setPassword(password);
+        saveOrUpdate(user);
+    }
+
+    private void updateName() {
+        String name = sc.getString("Name: ");
+        user.setName(name);
+        saveOrUpdate(user);
+    }
+
+    private void updateUserName() {
+        String userName = sc.getString("UserName: ");
+        user.setUserName(userName);
+        try{
+            saveOrUpdate(user);
+        }catch (Exception ex){
+            System.out.println("Error While Updating");
+        }
+    }
+
     private void iteratingUsersSet(Set<User> users) {
         if (users != null) {
             users.forEach(System.out::println);

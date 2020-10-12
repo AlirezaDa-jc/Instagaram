@@ -31,14 +31,15 @@ public class Menu {
     public void display() {
         System.out.println("To Check Daily Posts Press 1 ");
         System.out.println("To Follow Someone Press 2");
-        System.out.println("To See Someone's Posts Press 3");
+        System.out.println("To See Posts Of One Of Your Followings Press 3");
         System.out.println("To Post To Your Profile Press 4");
         System.out.println("To See The Posts You Liked Press 5");
         System.out.println("To See Posts You Commented Press 6");
         System.out.println("To See Your Followers Press 7");
         System.out.println("To See Ones You Follow Press 8");
         System.out.println("To See Your Posts Press 9");
-        System.out.println("To See Posts Of One Of Your Followings Press 10");
+        System.out.println("To Edit Your Profile Press 10");
+        System.out.println("To See Trends Press 11");
         System.out.println("To Log Out Press 12");
     }
 
@@ -55,6 +56,9 @@ public class Menu {
                         break;
                     case 2:
                         userService.follow();
+                        break;
+                    case 3:
+                        postService.displayFollowingsPosts();
                         break;
                     case 4:
                         postService.insert();
@@ -75,12 +79,15 @@ public class Menu {
                         postService.displayUsersPosts();
                         break;
                     case 10:
-                        postService.displayFollowingsPosts();
+                        userService.edit();
                         break;
                     case 11:
-                        //Trend Posts!
-                        //Todo
+                        postService.displayTrends();
+                        break;
                     case 12:
+                        postService.edit();
+                        break;
+                    case 13:
                         userService.exit();
                         flag = false;
                         break;

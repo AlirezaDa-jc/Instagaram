@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -24,13 +25,14 @@ import java.util.function.Consumer;
 public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> implements PostService {
     private Scan sc;
     private Consumer<Post> addLikeOrComment;
+    private Consumer<Post> displayPost;
     private UserService userService;
     public PostServiceImpl() {
         PostRepository postRepository = new PostRepositoryImpl();
         sc = MyApp.getSc();
         userService = MyApp.getUserService();
         //Consumer!
-        addLikeOrComment = (c) -> {
+        displayPost = (c) -> {
             if (c.getImage() == null){
                 System.out.println(c);
             }else {
@@ -46,6 +48,8 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
                     e.printStackTrace();
                 }
             }
+        };
+        addLikeOrComment = (c) -> {
             String choice = sc.getString("Comment Or Like Or Both Or Pass: ").toUpperCase();
             User user = UserServiceImpl.getUser();
             switch (choice) {
@@ -117,7 +121,41 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
         String userName = sc.getString("Username: ");
         User user = userService.findByUserName(userName);
         user.getPosts()
-                .forEach(addLikeOrComment);
+                .forEach(displayPost.andThen(addLikeOrComment));
+    }
+
+    @Override
+    public void displayTrends() {
+        int max = baseRepository.findMaximumLike();
+        List<Post> trends = baseRepository.findTrends(max);
+        trends.forEach(displayPost.andThen(addLikeOrComment));
+    }
+
+    @Override
+    public void edit() {
+        List<Post> all = UserServiceImpl.getUser().getPosts();
+        all.forEach(displayPost);
+        int id  = Integer.parseInt(sc.getString("Post ID: "));
+        id--;
+        Post post = all.get(id);
+        if(post == null) return;
+        String choice = sc.getString("Edit Content Or Delete Post?: (content,delete): ").toLowerCase();
+        switch (choice){
+            case "content":
+                updateContent(post);
+                break;
+            case "delete":
+               baseRepository.delete(post);
+                break;
+            default:
+                System.out.println("Invalid Input!");
+        }
+    }
+
+    private void updateContent(Post post) {
+        String content = sc.getString("New Content: ");
+        post.setContent(content);
+        saveOrUpdate(post);
     }
 
     @Override
@@ -137,7 +175,6 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
         comment.setComment(content);
         comment.setUser(user);
         comment.setPost(c);
-        System.out.println(comment);
     }
 //    @Override
 //    public void displayCommentedPosts() {
@@ -162,7 +199,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
     }
 
     private void displayPosts(User u) {
-        Set<Post> posts = u.getPosts();
+        List<Post> posts = u.getPosts();
         posts.forEach(addLikeOrComment);
     }
 

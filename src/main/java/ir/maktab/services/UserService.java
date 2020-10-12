@@ -18,4 +18,5 @@ public interface UserService extends BaseService<User,Long> {
 
     void displayFollowings();
 
+    void edit();
 }

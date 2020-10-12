@@ -3,9 +3,7 @@ package ir.maktab.domains;
 import ir.maktab.base.domains.BaseEntity;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -18,8 +16,8 @@ public class User extends BaseEntity<Long> {
     private String password;
     @Column(name = "last_online")
     private Date date;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<Post> posts = new HashSet<>();
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Post> posts = new LinkedList<>();
 
     @ManyToMany
     @JoinTable(name = "User_Like",
@@ -71,11 +69,11 @@ public class User extends BaseEntity<Long> {
         this.password = password;
     }
 
-    public Set<Post> getPosts() {
+    public List<Post> getPosts() {
         return posts;
     }
 
-    public void setPosts(Set<Post> posts) {
+    public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
 

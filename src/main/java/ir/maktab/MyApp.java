@@ -1,13 +1,12 @@
 package ir.maktab;
 
-import ir.maktab.domains.Comment;
+import ir.maktab.controller.menu.Menu;
 import ir.maktab.services.CommentService;
 import ir.maktab.services.PostService;
 import ir.maktab.services.UserService;
 import ir.maktab.services.impl.CommentServiceImpl;
 import ir.maktab.services.impl.PostServiceImpl;
 import ir.maktab.services.impl.UserServiceImpl;
-import ir.maktab.controller.menu.Menu;
 
 public class MyApp {
     private static Scan sc = Scan.getInstance();
@@ -47,6 +46,9 @@ public class MyApp {
                 if (userService.login()) {
                     return true;
                 }
+                break;
+            case "EXIT":
+                System.exit(0);
                 break;
             default:
                 return false;

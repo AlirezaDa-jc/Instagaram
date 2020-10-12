@@ -19,7 +19,7 @@ public class Post extends BaseEntity<Long> {
     private byte[] image;
 
     @ManyToOne
-    @JoinColumn(name = "publisherid")
+    @JoinColumn(name = "userid")
     private User user;
 
     @ManyToMany

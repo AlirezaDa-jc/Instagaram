@@ -15,4 +15,9 @@ public interface PostService extends BaseService<Post, Long> {
     void displayUsersPosts();
 
     void displayFollowingsPosts();
+
+    void displayTrends();
+
+    void edit();
+
 }
