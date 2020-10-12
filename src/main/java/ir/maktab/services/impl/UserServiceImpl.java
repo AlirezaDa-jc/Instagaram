@@ -47,13 +47,13 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
     @Override
     public void displayFollowers() {
         Set<User> followers = user.getFollowers();
-        iteratingUsersSet(followers);
+        followers.forEach(System.out::println);
     }
 
     @Override
     public void displayFollowings() {
         Set<User> followings = user.getFollowings();
-        iteratingUsersSet(followings);
+        followings.forEach(System.out::println);
     }
 
     @Override
@@ -101,13 +101,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
         }
     }
 
-    private void iteratingUsersSet(Set<User> users) {
-        if (users != null) {
-            users.forEach(System.out::println);
-        } else {
-            System.out.println("No Post Commented");
-        }
-    }
 
     @Override
     public boolean signIn() {

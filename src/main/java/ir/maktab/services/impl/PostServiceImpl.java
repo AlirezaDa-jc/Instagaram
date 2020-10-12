@@ -111,7 +111,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
             int i = 0;
             Iterator<Post> it = postsLiked.iterator();
             while (it.hasNext() && i < 5) {
-                System.out.println(it.next());
+                it.forEachRemaining(displayPost.andThen(addLikeOrComment));
                 i++;
             }
         } else {
