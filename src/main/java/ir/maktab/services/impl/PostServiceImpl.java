@@ -52,8 +52,6 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                File file = new File("output.jpg");
-                file.delete();
             }
         };
         addLikeOrComment = (c) -> {
@@ -128,6 +126,12 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         User user = userService.findByUserName(userName);
         user.getPosts()
                 .forEach(displayPost.andThen(addLikeOrComment));
+        deleteOutputFile();
+    }
+
+    private void deleteOutputFile() {
+        File file = new File("output.jpg");
+        file.delete();
     }
 
     @Override
@@ -135,6 +139,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         int max = baseRepository.findMaximumLike();
         List<Post> trends = baseRepository.findTrends(max);
         trends.forEach(displayPost.andThen(addLikeOrComment));
+        deleteOutputFile();
     }
 
     @Override
@@ -179,6 +184,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                         System.out.println("No Posts Till Now!");
                     }
                 });
+        deleteOutputFile();
     }
 
 //    @Override
@@ -206,6 +212,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
     private void displayPosts(User u) {
         List<Post> posts = u.getPosts();
         posts.forEach(displayPost.andThen(addLikeOrComment));
+        deleteOutputFile();
     }
 
 }
