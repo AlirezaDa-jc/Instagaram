@@ -5,9 +5,9 @@ import ir.maktab.Dao.impl.PostRepositoryImpl;
 import ir.maktab.MyApp;
 import ir.maktab.Scan;
 import ir.maktab.base.services.impl.BaseServiceImpl;
-import ir.maktab.domains.Comment;
 import ir.maktab.domains.Post;
 import ir.maktab.domains.User;
+import ir.maktab.services.CommentService;
 import ir.maktab.services.PostService;
 import ir.maktab.services.UserService;
 
@@ -29,11 +29,13 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
     private Consumer<Post> addLikeOrComment;
     private Consumer<Post> displayPost;
     private UserService userService;
+    private CommentService commentService;
 
     public PostServiceImpl() {
         PostRepository postRepository = new PostRepositoryImpl();
         sc = MyApp.getSc();
         userService = MyApp.getUserService();
+        commentService = new CommentServiceImpl();
         //Consumer!
         displayPost = (c) -> {
             if (c.getImage() == null) {
@@ -53,7 +55,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
             }
         };
         addLikeOrComment = (c) -> {
-            String choice = sc.getString("Comment Or Like Or Both Or Pass Or Exit: ").toUpperCase();
+            String choice = sc.getString("Comment Or Like Or Both Or Pass: ").toUpperCase();
             User user = UserServiceImpl.getUser();
             switch (choice) {
                 case "LIKE":
@@ -61,11 +63,11 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                     user.addPostLiked(c);
                     break;
                 case "COMMENT":
-                    addCommentToPost(c, user);
+                    commentService.addCommentToPost(c, user);
                     break;
                 case "BOTH":
                     c.addLike(user);
-                    addCommentToPost(c, user);
+                    commentService.addCommentToPost(c, user);
                     break;
                 default:
             }
@@ -74,9 +76,6 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
             }
             File file = new File("output.jpg");
             file.delete();
-            if (choice.equals("EXIT"))
-                return;
-            ;
         };
         super.setRepository(postRepository);
     }
@@ -181,14 +180,6 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                 });
     }
 
-
-    private void addCommentToPost(Post c, User user) {
-        Comment comment = new Comment();
-        String content = sc.getString("Comment: ");
-        comment.setComment(content);
-        comment.setUser(user);
-        comment.setPost(c);
-    }
 //    @Override
 //    public void displayCommentedPosts() {
 //        User u = UserServiceImpl.getUser();
