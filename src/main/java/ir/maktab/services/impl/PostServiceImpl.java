@@ -20,23 +20,25 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 
-public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> implements PostService {
+public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository> implements PostService {
     private Scan sc;
     private Consumer<Post> addLikeOrComment;
     private Consumer<Post> displayPost;
     private UserService userService;
+
     public PostServiceImpl() {
         PostRepository postRepository = new PostRepositoryImpl();
         sc = MyApp.getSc();
         userService = MyApp.getUserService();
         //Consumer!
         displayPost = (c) -> {
-            if (c.getImage() == null){
+            if (c.getImage() == null) {
                 System.out.println(c);
-            }else {
+            } else {
                 byte[] img = c.getImage();
                 try {
                     FileOutputStream fos = new FileOutputStream("output.jpg");
@@ -51,7 +53,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
             }
         };
         addLikeOrComment = (c) -> {
-            String choice = sc.getString("Comment Or Like Or Both Or Pass: ").toUpperCase();
+            String choice = sc.getString("Comment Or Like Or Both Or Pass Or Exit: ").toUpperCase();
             User user = UserServiceImpl.getUser();
             switch (choice) {
                 case "LIKE":
@@ -59,11 +61,11 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
                     user.addPostLiked(c);
                     break;
                 case "COMMENT":
-                    addCommentToPost(c,user);
+                    addCommentToPost(c, user);
                     break;
                 case "BOTH":
                     c.addLike(user);
-                    addCommentToPost(c,user);
+                    addCommentToPost(c, user);
                     break;
                 default:
             }
@@ -72,6 +74,9 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
             }
             File file = new File("output.jpg");
             file.delete();
+            if (choice.equals("EXIT"))
+                return;
+            ;
         };
         super.setRepository(postRepository);
     }
@@ -81,7 +86,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
         String content = sc.getString("Contents Of Post: ");
         Post post = new Post();
         char choice = sc.getString("Add Image: Y/N : ").toUpperCase().charAt(0);
-        if(choice == 'Y'){
+        if (choice == 'Y') {
             String path = sc.getString("Path: ").toLowerCase();
             File file = new File(path);
             byte[] bFile = new byte[(int) file.length()];
@@ -104,14 +109,14 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
     public void displayLikedPosts() {
         User u = UserServiceImpl.getUser();
         Set<Post> postsLiked = u.getPostsLiked();
-        if(postsLiked != null){
+        if (postsLiked != null) {
             int i = 0;
             Iterator<Post> it = postsLiked.iterator();
-            while(it.hasNext() && i < 5){
+            while (it.hasNext() && i < 5) {
                 System.out.println(it.next());
                 i++;
             }
-        }else{
+        } else {
             System.out.println("No Post Liked!");
         }
     }
@@ -136,17 +141,17 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
     public void edit() {
         List<Post> all = UserServiceImpl.getUser().getPosts();
         all.forEach(displayPost);
-        int id  = Integer.parseInt(sc.getString("Post ID: "));
+        int id = Integer.parseInt(sc.getString("Post ID: "));
         id--;
         Post post = all.get(id);
-        if(post == null) return;
+        if (post == null) return;
         String choice = sc.getString("Edit Content Or Delete Post?: (content,delete): ").toLowerCase();
-        switch (choice){
+        switch (choice) {
             case "content":
                 updateContent(post);
                 break;
             case "delete":
-               baseRepository.delete(post);
+                baseRepository.delete(post);
                 break;
             default:
                 System.out.println("Invalid Input!");
@@ -161,20 +166,23 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
 
     @Override
     public void displayDailyPosts() {
-        try {
-            User user = UserServiceImpl.getUser();
-            Set<User> followings = user.getFollowings();
-            followings.stream()
-                    .map(User::getPosts)
-                    .forEach(posts -> posts.stream()
+        User user = UserServiceImpl.getUser();
+        Set<User> followings = user.getFollowings();
+        followings.stream()
+                .map(User::getPosts)
+                .forEach(posts -> {
+                    AtomicInteger i = new AtomicInteger();
+                    posts.stream()
                             .filter((c) -> c.getDate().compareTo(user.getDate()) > 0)
-                            .forEach(displayPost.andThen(addLikeOrComment)));
-        }catch (Exception ex){
-            System.out.println("No Posts!");
-        }
+                            .forEach(displayPost.andThen(addLikeOrComment).andThen((c) -> i.getAndIncrement()));
+                    if(i.get() == 0){
+                        System.out.println("No Posts Till Now!");
+                    }
+                });
     }
 
-    private void addCommentToPost(Post c,User user) {
+
+    private void addCommentToPost(Post c, User user) {
         Comment comment = new Comment();
         String content = sc.getString("Comment: ");
         comment.setComment(content);

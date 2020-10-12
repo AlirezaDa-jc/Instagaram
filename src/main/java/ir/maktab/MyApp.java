@@ -40,8 +40,7 @@ public class MyApp {
         String choice = sc.getString("Sign In Or Login Or Exit: ");
         switch (choice.toUpperCase()) {
             case "SIGN IN":
-                userService.signIn();
-                return true;
+                return userService.signIn();
             case "LOGIN":
                 if (userService.login()) {
                     return true;

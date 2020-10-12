@@ -111,14 +111,20 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
 
     @Override
     public boolean signIn() {
-        String userName = sc.getString("Username: ");
-        user.setUserName(userName);
-        String name = sc.getString("Name: ");
-        user.setName(name);
-        String password = sc.getString("Password: ");
-        user.setPassword(password);
-        baseRepository.saveOrUpdate(user);
-        return true;
+        try {
+            String userName = sc.getString("Username: ");
+            user.setUserName(userName);
+            String name = sc.getString("Name: ");
+            user.setName(name);
+            String password = sc.getString("Password: ");
+            user.setPassword(password);
+            user.setDate(new Date());
+            baseRepository.saveOrUpdate(user);
+            return true;
+        }catch (Exception ex){
+            System.out.println("Invalid Or Duplicate Entries!");
+            return false;
+        }
     }
 
     @Override
