@@ -40,7 +40,8 @@ public class Menu {
         System.out.println("To See Your Posts Press 9");
         System.out.println("To Edit Your Profile Press 10");
         System.out.println("To See Trends Press 11");
-        System.out.println("To Log Out Press 12");
+        System.out.println("To Edit Or Delete Your Posts Press 12");
+        System.out.println("To Log Out Press 13");
     }
 
 
@@ -61,7 +62,7 @@ public class Menu {
                         postService.displayFollowingsPosts();
                         break;
                     case 4:
-                        postService.insert();
+                        postService.save();
                         break;
                     case 5:
                         postService.displayLikedPosts();

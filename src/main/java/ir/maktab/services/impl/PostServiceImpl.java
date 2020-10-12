@@ -15,6 +15,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -76,22 +77,22 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
     }
 
     @Override
-    public void insert() {
+    public void save() {
         String content = sc.getString("Contents Of Post: ");
         Post post = new Post();
         char choice = sc.getString("Add Image: Y/N : ").toUpperCase().charAt(0);
         if(choice == 'Y'){
-            String path = sc.getString("Path: ");
+            String path = sc.getString("Path: ").toLowerCase();
             File file = new File(path);
             byte[] bFile = new byte[(int) file.length()];
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);
                 fileInputStream.read(bFile);
                 fileInputStream.close();
-            } catch (Exception e) {
+                post.setImage(bFile);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            post.setImage(bFile);
         }
         post.setContent(content);
         post.setUser(UserServiceImpl.getUser());
@@ -160,13 +161,17 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
 
     @Override
     public void displayDailyPosts() {
-        User user = UserServiceImpl.getUser();
-        Set<User> followings = user.getFollowings();
-        followings.stream()
-                .map(User::getPosts)
-                .forEach(posts -> posts.stream()
-                        .filter((c) -> c.getDate().compareTo(user.getDate()) > 0)
-                        .forEach(addLikeOrComment));
+        try {
+            User user = UserServiceImpl.getUser();
+            Set<User> followings = user.getFollowings();
+            followings.stream()
+                    .map(User::getPosts)
+                    .forEach(posts -> posts.stream()
+                            .filter((c) -> c.getDate().compareTo(user.getDate()) > 0)
+                            .forEach(displayPost.andThen(addLikeOrComment)));
+        }catch (Exception ex){
+            System.out.println("No Posts!");
+        }
     }
 
     private void addCommentToPost(Post c,User user) {
@@ -200,7 +205,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post,Long, PostRepository> 
 
     private void displayPosts(User u) {
         List<Post> posts = u.getPosts();
-        posts.forEach(addLikeOrComment);
+        posts.forEach(displayPost.andThen(addLikeOrComment));
     }
 
 }
