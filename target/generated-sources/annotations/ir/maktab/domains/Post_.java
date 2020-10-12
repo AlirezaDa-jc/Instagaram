@@ -11,6 +11,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public abstract class Post_ extends ir.maktab.base.domains.BaseEntity_ {
 
 	public static volatile SingularAttribute<Post, Date> date;
+	public static volatile SingularAttribute<Post, byte[]> image;
 	public static volatile SetAttribute<Post, Comment> comments;
 	public static volatile SetAttribute<Post, User> likesUser;
 	public static volatile SingularAttribute<Post, User> user;

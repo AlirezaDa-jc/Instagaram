@@ -14,6 +14,10 @@ public class Post extends BaseEntity<Long> {
     private String content;
     @Column(name = "date", nullable = false, updatable = false)
     private Date date = new Date();
+    @Lob
+    @Column(name="image", columnDefinition="mediumblob")
+    private byte[] image;
+
     @ManyToOne
     @JoinColumn(name = "publisherid")
     private User user;
@@ -80,6 +84,14 @@ public class Post extends BaseEntity<Long> {
     public void addComment(Comment comment) {
 //        comment.setPost(this);
         comments.add(comment);
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     @Override

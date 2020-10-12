@@ -4,13 +4,9 @@ import ir.maktab.base.services.BaseService;
 import ir.maktab.domains.User;
 
 public interface UserService extends BaseService<User,Long> {
-    void displayDailyPosts();
-
     boolean signIn();
 
-    User findByUsername(String userName);
-
-    void findByUsername();
+    User findByUserName(String userName);
 
     void follow();
 
@@ -22,5 +18,4 @@ public interface UserService extends BaseService<User,Long> {
 
     void displayFollowings();
 
-    void displayFollowingsPosts();
 }

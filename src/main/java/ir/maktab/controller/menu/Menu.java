@@ -39,6 +39,7 @@ public class Menu {
         System.out.println("To See Ones You Follow Press 8");
         System.out.println("To See Your Posts Press 9");
         System.out.println("To See Posts Of One Of Your Followings Press 10");
+        System.out.println("To Log Out Press 12");
     }
 
 
@@ -50,7 +51,7 @@ public class Menu {
                 setChoice();
                 switch (choice) {
                     case 1:
-                        userService.displayDailyPosts();
+                        postService.displayDailyPosts();
                         break;
                     case 2:
                         userService.follow();
@@ -74,9 +75,12 @@ public class Menu {
                         postService.displayUsersPosts();
                         break;
                     case 10:
-                        userService.displayFollowingsPosts();
+                        postService.displayFollowingsPosts();
                         break;
-                    case 15:
+                    case 11:
+                        //Trend Posts!
+                        //Todo
+                    case 12:
                         userService.exit();
                         flag = false;
                         break;
