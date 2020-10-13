@@ -41,7 +41,8 @@ public class Menu {
         System.out.println("To Edit Your Profile Press 10");
         System.out.println("To See Trends Press 11");
         System.out.println("To Edit Or Delete Your Posts Press 12");
-        System.out.println("To Log Out Press 13");
+        System.out.println("To UnFollow Someone Press 13");
+        System.out.println("To Log Out Press 14");
     }
 
 
@@ -89,6 +90,9 @@ public class Menu {
                         postService.edit();
                         break;
                     case 13:
+                        userService.unFollow();
+                        break;
+                    case 14:
                         userService.exit();
                         flag = false;
                         break;

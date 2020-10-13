@@ -30,6 +30,11 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment, Long, CommentRe
     }
 
     @Override
+    public void delete(Comment comment) {
+        baseRepository.delete(comment);
+    }
+
+    @Override
     public void displayCommentedPosts() {
         User u = UserServiceImpl.getUser();
         List<Post> posts = baseRepository.findByUser(u);

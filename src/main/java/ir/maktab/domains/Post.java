@@ -3,9 +3,7 @@ package ir.maktab.domains;
 import ir.maktab.base.domains.BaseEntity;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "posts")
@@ -28,8 +26,8 @@ public class Post extends BaseEntity<Long> {
             inverseJoinColumns = {@JoinColumn(name = "post_id")})
     Set<User> likesUser = new HashSet<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<>();
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private List<Comment> comments = new LinkedList<>();
 
 
     public Date getDate() {
@@ -68,11 +66,11 @@ public class Post extends BaseEntity<Long> {
         comments.add(comment);
     }
 
-    public Set<Comment> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(Set<Comment> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 

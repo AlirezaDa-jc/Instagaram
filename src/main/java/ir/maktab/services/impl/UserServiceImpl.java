@@ -74,6 +74,18 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
         }
     }
 
+    @Override
+    public void unFollow() {
+        displayFollowings();
+        String userName = sc.getString("Username Of User You Want To UnFollow");
+        User following = findByUserName(userName);
+        user.removeFollowing(following);
+        following.removeFollower(user);
+        saveOrUpdate(following);
+        saveOrUpdate(user);
+        System.out.println("Done");
+    }
+
     private void updatePassword() {
         String currentPassword = sc.getString("Current Password: ");
         if(!currentPassword.equals(user.getPassword())){
@@ -132,6 +144,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
         following.addFollower(user);
         baseRepository.saveOrUpdate(following);
         baseRepository.saveOrUpdate(user);
+        System.out.println("Following: " + following);
     }
 
     @Override

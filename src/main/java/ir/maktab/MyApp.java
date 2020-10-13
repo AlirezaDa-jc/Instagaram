@@ -32,8 +32,12 @@ public class MyApp {
 
     public static void main(String[] args) {
         while (true)
-        if(loginOrSignIn())
-        startApp();
+        if(loginOrSignIn()) {
+            userService = new UserServiceImpl();
+            postService = new PostServiceImpl();
+            commentService = new CommentServiceImpl();
+            startApp();
+        }
     }
 
     private static boolean loginOrSignIn() {

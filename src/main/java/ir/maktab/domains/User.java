@@ -126,6 +126,12 @@ public class User extends BaseEntity<Long> {
         follower.getFollowings().add(this);
     }
 
+    public void removeFollowing(User following) {
+        followings.remove(following);
+    }
+    public void removeFollower(User user) {
+        followers.remove(user);
+    }
 
     @Override
     public String toString() {
@@ -136,4 +142,6 @@ public class User extends BaseEntity<Long> {
                 "Followers: " + followers.size() + '\t'+
                 "Followings: " + followings.size() + '\t';
     }
+
+
 }

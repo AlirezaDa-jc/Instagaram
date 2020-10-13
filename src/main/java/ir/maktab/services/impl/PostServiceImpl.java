@@ -5,6 +5,7 @@ import ir.maktab.Dao.impl.PostRepositoryImpl;
 import ir.maktab.MyApp;
 import ir.maktab.Scan;
 import ir.maktab.base.services.impl.BaseServiceImpl;
+import ir.maktab.domains.Comment;
 import ir.maktab.domains.Post;
 import ir.maktab.domains.User;
 import ir.maktab.services.CommentService;
@@ -150,7 +151,8 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         id--;
         Post post = all.get(id);
         if (post == null) return;
-        String choice = sc.getString("Edit Content Or Delete Post?: (content,delete): ").toLowerCase();
+        String choice = sc.getString("Edit Content Or Delete Post?: (content,delete,deleteComment): ")
+                .toLowerCase();
         switch (choice) {
             case "content":
                 updateContent(post);
@@ -158,8 +160,24 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
             case "delete":
                 baseRepository.delete(post);
                 break;
+            case "deletecomment":
+                deleteComment(post);
+                break;
             default:
                 System.out.println("Invalid Input!");
+        }
+    }
+
+    private void deleteComment(Post post) {
+        List<Comment> comments = post.getComments();
+        comments.forEach(System.out::println);
+        int id = Integer.parseInt(sc.getString("Comment ID:"));
+        id--;
+        try {
+            Comment comment = comments.get(id);
+            commentService.delete(comment);
+        }catch (Exception ex){
+            System.out.println("Invalid ID!");
         }
     }
 
