@@ -25,6 +25,7 @@ class CommentRepositoryImplTest extends BaseRepositoryImpl<Comment,Long> {
     private List<Post> posts = new LinkedList<>();
     private static UserRepository userRepository;
     private static CommentRepository commentRepository;
+    static Comment comment;
 
     @BeforeAll
     static void beforeAll() {
@@ -41,7 +42,7 @@ class CommentRepositoryImplTest extends BaseRepositoryImpl<Comment,Long> {
         firstPost.setDate(new Date());
         postRepository.saveOrUpdate(firstPost);
         commentRepository = new CommentRepositoryImpl();
-        Comment comment = new Comment();
+        comment = new Comment();
         comment.setComment("comment");
         comment.setUser(user);
         comment.setPost(firstPost);
@@ -49,6 +50,9 @@ class CommentRepositoryImplTest extends BaseRepositoryImpl<Comment,Long> {
 
     @Test
     void findByUser() {
+        System.out.println(user);
+        System.out.println(comment);
+        System.out.println(firstPost);
         Assertions.assertEquals(firstPost,commentRepository.findByUser(user).get(0));
     }
 

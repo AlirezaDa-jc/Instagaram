@@ -26,7 +26,7 @@ public class Post extends BaseEntity<Long> {
             inverseJoinColumns = {@JoinColumn(name = "post_id")})
     Set<User> likesUser = new HashSet<>();
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Comment> comments = new LinkedList<>();
 
 

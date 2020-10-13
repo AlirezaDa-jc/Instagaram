@@ -43,8 +43,9 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                 System.out.println(c);
             } else {
                 byte[] img = c.getImage();
+                File file = new File("output.jpg");
                 try {
-                    FileOutputStream fos = new FileOutputStream("output.jpg");
+                    FileOutputStream fos = new FileOutputStream(file);
                     fos.write(img);
                     fos.close();
                     Desktop desktop = Desktop.getDesktop();
@@ -113,7 +114,8 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
             int i = 0;
             Iterator<Post> it = postsLiked.iterator();
             while (it.hasNext() && i < 5) {
-                it.forEachRemaining(displayPost.andThen(addLikeOrComment));
+                it.forEachRemaining(displayPost.andThen(addLikeOrComment).andThen
+                        ((c) -> deleteOutputFile()));
                 i++;
             }
         } else {
@@ -127,7 +129,8 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         String userName = sc.getString("Username: ");
         User user = userService.findByUserName(userName);
         user.getPosts()
-                .forEach(displayPost.andThen(addLikeOrComment));
+                .forEach(displayPost.andThen(addLikeOrComment).andThen
+                        ((c) -> deleteOutputFile()));
         deleteOutputFile();
     }
 
@@ -140,7 +143,8 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
     public void displayTrends() {
         int max = baseRepository.findMaximumLike();
         List<Post> trends = baseRepository.findTrends(max);
-        trends.forEach(displayPost.andThen(addLikeOrComment));
+        trends.forEach(displayPost.andThen(addLikeOrComment).andThen
+                ((c) -> deleteOutputFile()));
         deleteOutputFile();
     }
 
@@ -160,6 +164,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                 break;
             case "delete":
                 baseRepository.delete(post);
+                baseRepository.flush();
                 break;
             case "deletecomment":
                 deleteComment(post);
@@ -198,12 +203,12 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                 .forEach(posts -> {
                     posts.stream()
                             .filter((c) -> c.getDate().compareTo(user.getDate()) > 0)
-                            .forEach(displayPost.andThen(addLikeOrComment).andThen((c) -> i.getAndIncrement()));
+                            .forEach(displayPost.andThen(addLikeOrComment).andThen((c) -> i.getAndIncrement()).andThen
+                                    ((c) -> deleteOutputFile()));
                 });
         if (i.get() == 0) {
             System.out.println("No Posts Till Now!");
         }
-        deleteOutputFile();
     }
 
 //    @Override
@@ -230,7 +235,8 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
 
     private void displayPosts(User u) {
         List<Post> posts = u.getPosts();
-        posts.forEach(displayPost.andThen(addLikeOrComment));
+        posts.forEach(displayPost.andThen(addLikeOrComment).andThen
+                ((c) -> deleteOutputFile()));
         deleteOutputFile();
     }
 

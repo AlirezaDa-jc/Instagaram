@@ -12,6 +12,12 @@ public abstract class BaseRepositoryImpl<E, PK extends Number> implements BaseRe
 
     protected EntityManager em = EntityManagerGenerator.getEntityManager();
 
+    @Override
+    public void flush() {
+        em.getTransaction().begin();
+        em.clear();
+        em.getTransaction().commit();
+    }
 
     @Override
     public E saveOrUpdate(E e) {

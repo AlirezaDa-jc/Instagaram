@@ -19,6 +19,8 @@ public interface BaseRepository<E, PK extends Number> {
 
     void delete(E e);
 
+    void flush();
+
 //
 //    void deleteAll();
 

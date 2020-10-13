@@ -96,6 +96,9 @@ public class User extends BaseEntity<Long> {
 ////        comment.setUser(this);
         comments.add(comment);
     }
+    public void addPost(Post e) {
+        posts.add(e);
+    }
 
     public Set<Comment> getComments() {
         return comments;
