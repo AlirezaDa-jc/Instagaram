@@ -86,7 +86,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         Post post = new Post();
         char choice = sc.getString("Add Image: Y/N : ").toUpperCase().charAt(0);
         if (choice == 'Y') {
-            String path = sc.getString("Path: ").toLowerCase();
+            String path = sc.getString("Path: ");
             File file = new File(path);
             byte[] bFile = new byte[(int) file.length()];
             try {
@@ -96,6 +96,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                 post.setImage(bFile);
             } catch (IOException e) {
                 e.printStackTrace();
+                return;
             }
         }
         post.setContent(content);
@@ -176,7 +177,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         try {
             Comment comment = comments.get(id);
             commentService.delete(comment);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Invalid ID!");
         }
     }
@@ -191,17 +192,17 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
     public void displayDailyPosts() {
         User user = UserServiceImpl.getUser();
         Set<User> followings = user.getFollowings();
+        AtomicInteger i = new AtomicInteger();
         followings.stream()
                 .map(User::getPosts)
                 .forEach(posts -> {
-                    AtomicInteger i = new AtomicInteger();
                     posts.stream()
                             .filter((c) -> c.getDate().compareTo(user.getDate()) > 0)
                             .forEach(displayPost.andThen(addLikeOrComment).andThen((c) -> i.getAndIncrement()));
-                    if(i.get() == 0){
-                        System.out.println("No Posts Till Now!");
-                    }
                 });
+        if (i.get() == 0) {
+            System.out.println("No Posts Till Now!");
+        }
         deleteOutputFile();
     }
 
