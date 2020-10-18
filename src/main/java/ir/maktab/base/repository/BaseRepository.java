@@ -13,15 +13,9 @@ public interface BaseRepository<E, PK extends Number> {
 
     List<E> findAll();
 
-//    E findByTitle(String title);
-//
-//    List<E> findAllFiltered(Predicate<E> predicate);
-
     void delete(E e);
 
-    void flush();
+    void resetCache();
 
-//
-//    void deleteAll();
-
+     void  refresh(Object c);
 }

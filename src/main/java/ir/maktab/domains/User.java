@@ -135,7 +135,8 @@ public class User extends BaseEntity<Long> {
     public void removeFollower(User user) {
         followers.remove(user);
     }
-
+    public void removePost(Post post) { posts.remove(post);
+    }
     @Override
     public String toString() {
         return "User: \n" +
@@ -145,6 +146,7 @@ public class User extends BaseEntity<Long> {
                 "Followers: " + followers.size() + '\t'+
                 "Followings: " + followings.size() + '\t';
     }
+
 
 
 }

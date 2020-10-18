@@ -32,7 +32,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
         return user;
     }
 
-    public void setUser(User user) {
+    public static void setUser(User user) {
         UserServiceImpl.user = user;
     }
 
@@ -117,6 +117,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
     @Override
     public boolean signIn() {
         try {
+            User user = new User();
             String userName = sc.getString("Username: ");
             user.setUserName(userName);
             String name = sc.getString("Name: ");
@@ -125,6 +126,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
             user.setPassword(password);
             user.setDate(new Date());
             baseRepository.saveOrUpdate(user);
+            setUser(user);
             return true;
         }catch (Exception ex){
             System.out.println("Invalid Or Duplicate Entries!");

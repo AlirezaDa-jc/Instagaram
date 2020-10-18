@@ -35,9 +35,8 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment, Long, CommentRe
     }
 
     @Override
-    public void displayCommentedPosts() {
+    public List<Post> getCommentedPosts() {
         User u = UserServiceImpl.getUser();
-        List<Post> posts = baseRepository.findByUser(u);
-        posts.forEach(System.out::println);
+        return baseRepository.findByUser(u);
     }
 }

@@ -69,7 +69,7 @@ public class Menu {
                         postService.displayLikedPosts();
                         break;
                     case 6:
-                        commentService.displayCommentedPosts();
+                        postService.displayCommentedPosts();
                         break;
                     case 7:
                         userService.displayFollowers();
@@ -97,8 +97,8 @@ public class Menu {
                         flag = false;
                         break;
                 }
-            } catch (NullPointerException ex) {
-                System.out.println("Invalid Inputs!");
+            } catch (Exception ex){
+                System.out.println("Invalid Input!");
             }
         }
     }

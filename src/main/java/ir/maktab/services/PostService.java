@@ -10,8 +10,6 @@ public interface PostService extends BaseService<Post, Long> {
 
     void displayDailyPosts();
 
-    //    void displayCommentedPosts();
-
     void displayUsersPosts();
 
     void displayFollowingsPosts();
@@ -20,4 +18,5 @@ public interface PostService extends BaseService<Post, Long> {
 
     void edit();
 
+    void displayCommentedPosts();
 }

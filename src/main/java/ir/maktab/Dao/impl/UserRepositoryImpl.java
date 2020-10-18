@@ -1,8 +1,9 @@
 package ir.maktab.Dao.impl;
 
+import ir.maktab.Dao.UserRepository;
 import ir.maktab.base.repository.impl.BaseRepositoryImpl;
 import ir.maktab.domains.User;
-import ir.maktab.Dao.UserRepository;
+import ir.maktab.services.impl.UserServiceImpl;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -42,6 +43,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User,Long> implements
             User u = query.getSingleResult();
             System.out.println("Welcome BaCk!" + u.getName() + " ^_^ ");
             em.getTransaction().commit();
+            UserServiceImpl.setUser(u);
             return u;
         }
         em.getTransaction().rollback();

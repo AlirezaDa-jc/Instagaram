@@ -13,10 +13,24 @@ public abstract class BaseRepositoryImpl<E, PK extends Number> implements BaseRe
     protected EntityManager em = EntityManagerGenerator.getEntityManager();
 
     @Override
-    public void flush() {
-        em.getTransaction().begin();
-        em.clear();
-        em.getTransaction().commit();
+    public void refresh(Object c) {
+//        em.clear();
+//        em = EntityManagerGenerator.getEntityManager();
+    }
+
+    @Override
+    public void resetCache() {
+
+//        if (em != null) {
+//            em.clear(); // internal cache clear
+//        }
+//        Cache cache = EntityManagerGenerator.getEmf().getCache();
+//
+//        if (cache != null) {
+//            cache.evictAll(); // Evict data from all query regions.
+//        }
+//        EntityManagerGenerator.setEmf();
+//        em = EntityManagerGenerator.getEntityManager();
     }
 
     @Override
@@ -28,6 +42,7 @@ public abstract class BaseRepositoryImpl<E, PK extends Number> implements BaseRe
             em.persist(e);
         }
         em.getTransaction().commit();
+        resetCache();
         return e;
     }
 
@@ -57,6 +72,7 @@ public abstract class BaseRepositoryImpl<E, PK extends Number> implements BaseRe
         em.getTransaction().begin();
         em.remove(e);
         em.getTransaction().commit();
+        refresh(e);
     }
 
 }

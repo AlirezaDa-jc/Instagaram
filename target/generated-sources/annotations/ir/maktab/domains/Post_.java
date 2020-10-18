@@ -14,6 +14,7 @@ public abstract class Post_ extends ir.maktab.base.domains.BaseEntity_ {
 	public static volatile SingularAttribute<Post, Date> date;
 	public static volatile SingularAttribute<Post, byte[]> image;
 	public static volatile ListAttribute<Post, Comment> comments;
+	public static volatile SingularAttribute<Post, byte[]> video;
 	public static volatile SetAttribute<Post, User> likesUser;
 	public static volatile SingularAttribute<Post, User> user;
 	public static volatile SingularAttribute<Post, String> content;

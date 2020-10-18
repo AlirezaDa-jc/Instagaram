@@ -5,8 +5,10 @@ import ir.maktab.domains.Comment;
 import ir.maktab.domains.Post;
 import ir.maktab.domains.User;
 
+import java.util.List;
+
 public interface CommentService extends BaseService<Comment,Long> {
-    void displayCommentedPosts();
+    List<Post> getCommentedPosts();
 
     void addCommentToPost(Post post, User user);
 

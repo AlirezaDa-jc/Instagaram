@@ -31,6 +31,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
     private Consumer<Post> displayPost;
     private UserService userService;
     private CommentService commentService;
+    private User user = UserServiceImpl.getUser();
 
     public PostServiceImpl() {
         PostRepository postRepository = new PostRepositoryImpl();
@@ -39,9 +40,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         commentService = new CommentServiceImpl();
         //Consumer!
         displayPost = (c) -> {
-            if (c.getImage() == null) {
-                System.out.println(c);
-            } else {
+            if (c.getImage() != null) {
                 byte[] img = c.getImage();
                 File file = new File("output.jpg");
                 try {
@@ -54,11 +53,25 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else if (c.getVideo() != null) {
+                byte[] video = c.getVideo();
+                File file = new File("output.mp4");
+                try {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.write(video);
+                    fos.close();
+                    Desktop desktop = Desktop.getDesktop();
+                    desktop.open(new File("output.mp4"));
+                    System.out.println(c);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println(c);
             }
         };
         addLikeOrComment = (c) -> {
             String choice = sc.getString("Comment Or Like Or Both Or Pass: ").toUpperCase();
-            User user = UserServiceImpl.getUser();
             switch (choice) {
                 case "LIKE":
                     c.addLike(user);
@@ -85,8 +98,9 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
     public void save() {
         String content = sc.getString("Contents Of Post: ");
         Post post = new Post();
-        char choice = sc.getString("Add Image: Y/N : ").toUpperCase().charAt(0);
-        if (choice == 'Y') {
+        String choice = sc.getString("Add Media Or Pass:").toUpperCase();
+        if (choice.equals("MEDIA")) {
+            choice = sc.getString("Image or Video:").toUpperCase();
             String path = sc.getString("Path: ");
             File file = new File(path);
             byte[] bFile = new byte[(int) file.length()];
@@ -94,13 +108,20 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                 FileInputStream fileInputStream = new FileInputStream(file);
                 fileInputStream.read(bFile);
                 fileInputStream.close();
-                post.setImage(bFile);
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
+            switch (choice) {
+                case "IMAGE":
+                    post.setImage(bFile);
+                    break;
+                case "VIDEO":
+                    post.setVideo(bFile);
+            }
         }
         post.setContent(content);
+        UserServiceImpl.getUser().addPost(post);
         post.setUser(UserServiceImpl.getUser());
         post.setDate(new Date());
         baseRepository.saveOrUpdate(post);
@@ -154,23 +175,31 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         all.forEach(displayPost);
         int id = Integer.parseInt(sc.getString("Post ID: "));
         id--;
-        Post post = all.get(id);
-        if (post == null) return;
-        String choice = sc.getString("Edit Content Or Delete Post?: (content,delete,deleteComment): ")
-                .toLowerCase();
-        switch (choice) {
-            case "content":
-                updateContent(post);
-                break;
-            case "delete":
-                baseRepository.delete(post);
-                baseRepository.flush();
-                break;
-            case "deletecomment":
-                deleteComment(post);
-                break;
-            default:
-                System.out.println("Invalid Input!");
+        try {
+            Post post = all.get(id);
+            if (post == null) return;
+            String choice = sc.getString("Edit Content Or Delete Post?: (content,delete,deleteComment): ")
+                    .toLowerCase();
+            switch (choice) {
+                case "content":
+                    updateContent(post);
+                    break;
+                case "delete":
+                    baseRepository.delete(post);
+                    baseRepository.resetCache();
+                    all.remove(post);
+                    break;
+                case "deletecomment":
+                    all.remove(post);
+                    deleteComment(post);
+                    all.add(post);
+                    break;
+                default:
+                    System.out.println("Invalid Input!");
+            }
+            UserServiceImpl.getUser().setPosts(all);
+        } catch (IndexOutOfBoundsException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -180,8 +209,11 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         int id = Integer.parseInt(sc.getString("Comment ID:"));
         id--;
         try {
-            Comment comment = comments.get(id);
-            commentService.delete(comment);
+        Comment comment = comments.get(id);
+        commentService.delete(comment);
+        comments.remove(comment);
+        post.setComments(comments);
+        baseRepository.saveOrUpdate(post);
         } catch (Exception ex) {
             System.out.println("Invalid ID!");
         }
@@ -240,4 +272,9 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         deleteOutputFile();
     }
 
+    @Override
+    public void displayCommentedPosts() {
+        List<Post> commentedPosts = commentService.getCommentedPosts();
+        commentedPosts.forEach(displayPost.andThen(addLikeOrComment));
+    }
 }

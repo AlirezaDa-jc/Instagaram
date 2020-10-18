@@ -13,8 +13,12 @@ public class Post extends BaseEntity<Long> {
     @Column(name = "date", nullable = false, updatable = false)
     private Date date = new Date();
     @Lob
-    @Column(name="image", columnDefinition="mediumblob")
+    @Column(name="image", columnDefinition="longblob")
     private byte[] image;
+
+    @Lob
+    @Column(name="video", columnDefinition="longblob")
+    private byte[] video;
 
     @ManyToOne
     @JoinColumn(name = "userid")
@@ -26,9 +30,16 @@ public class Post extends BaseEntity<Long> {
             inverseJoinColumns = {@JoinColumn(name = "post_id")})
     Set<User> likesUser = new HashSet<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE,CascadeType.MERGE},orphanRemoval = true)
     private List<Comment> comments = new LinkedList<>();
 
+    public byte[] getVideo() {
+        return video;
+    }
+
+    public void setVideo(byte[] video) {
+        this.video = video;
+    }
 
     public Date getDate() {
         return date;
