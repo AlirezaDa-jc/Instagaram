@@ -233,12 +233,10 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
         AtomicInteger i = new AtomicInteger();
         followings.stream()
                 .map(User::getPosts)
-                .forEach(posts -> {
-                    posts.stream()
-                            .filter((c) -> c.getDate().compareTo(user.getDate()) > 0)
-                            .forEach(displayPost.andThen(addLikeOrComment).andThen((c) -> i.getAndIncrement()).andThen
-                                    ((c) -> deleteOutputFile()));
-                });
+                .forEach(posts -> posts.stream()
+                        .filter((c) -> c.getDate().compareTo(user.getDate()) > 0)
+                        .forEach(displayPost.andThen(addLikeOrComment).andThen((c) -> i.getAndIncrement()).andThen
+                                ((c) -> deleteOutputFile())));
         if (i.get() == 0) {
             System.out.println("No Posts Till Now!");
         }
