@@ -2,22 +2,19 @@ package ir.maktab.controller.menu;
 
 import ir.maktab.MyApp;
 import ir.maktab.Scan;
-import ir.maktab.services.CommentService;
 import ir.maktab.services.PostService;
 import ir.maktab.services.UserService;
 
 public class Menu {
     private int choice;
     private static Scan sc;
-    private UserService userService;
-    private PostService postService;
-    private CommentService commentService;
+    private final UserService userService;
+    private final PostService postService;
 
     public Menu() {
         sc = MyApp.getSc();
         userService = MyApp.getUserService();
         postService = MyApp.getPostService();
-        commentService = MyApp.getCommentService();
     }
 
 

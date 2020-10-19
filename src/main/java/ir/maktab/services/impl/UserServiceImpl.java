@@ -6,7 +6,6 @@ import ir.maktab.MyApp;
 import ir.maktab.Scan;
 import ir.maktab.base.services.impl.BaseServiceImpl;
 import ir.maktab.domains.User;
-import ir.maktab.services.PostService;
 import ir.maktab.services.UserService;
 
 import java.util.Date;
@@ -15,12 +14,9 @@ import java.util.Set;
 public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository> implements UserService {
     private static User user = new User();
     private Scan sc;
-    private  PostService postService;
     public UserServiceImpl() {
         UserRepository repository = new UserRepositoryImpl();
         sc = MyApp.getSc();
-        postService = MyApp.getPostService();
-
         super.setRepository(repository);
     }
 

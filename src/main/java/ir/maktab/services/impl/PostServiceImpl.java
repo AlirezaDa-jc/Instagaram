@@ -26,18 +26,19 @@ import java.util.function.Consumer;
 
 
 public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository> implements PostService {
-    private Scan sc;
-    private Consumer<Post> addLikeOrComment;
-    private Consumer<Post> displayPost;
-    private UserService userService;
-    private CommentService commentService;
-    private User user = UserServiceImpl.getUser();
+    private final Scan sc;
+    private final Consumer<Post> addLikeOrComment;
+    private final Consumer<Post> displayPost;
+    private final UserService userService;
+    private final CommentService commentService;
+    private final User user;
 
     public PostServiceImpl() {
         PostRepository postRepository = new PostRepositoryImpl();
         sc = MyApp.getSc();
         userService = MyApp.getUserService();
         commentService = new CommentServiceImpl();
+        user = UserServiceImpl.getUser();
         //Consumer!
         displayPost = (c) -> {
             if (c.getImage() != null) {
@@ -98,9 +99,9 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
     public void save() {
         String content = sc.getString("Contents Of Post: ");
         Post post = new Post();
-        String choice = sc.getString("Add Media Or Pass:").toUpperCase();
-        if (choice.equals("MEDIA")) {
-            choice = sc.getString("Image or Video:").toUpperCase();
+        char choice = sc.getString("Add Media Y/N:").toUpperCase().charAt(0);
+        if (choice=='Y') {
+            String mediaChoice = sc.getString("Image or Video:").toUpperCase();
             String path = sc.getString("Path: ");
             File file = new File(path);
             byte[] bFile = new byte[(int) file.length()];
@@ -112,7 +113,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post, Long, PostRepository>
                 e.printStackTrace();
                 return;
             }
-            switch (choice) {
+            switch (mediaChoice) {
                 case "IMAGE":
                     post.setImage(bFile);
                     break;

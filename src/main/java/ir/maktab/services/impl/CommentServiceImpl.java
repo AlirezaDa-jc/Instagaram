@@ -13,7 +13,7 @@ import ir.maktab.services.CommentService;
 import java.util.List;
 
 public class CommentServiceImpl extends BaseServiceImpl<Comment, Long, CommentRepository> implements CommentService {
-    private Scan sc;
+    private final Scan sc;
     public CommentServiceImpl() {
         CommentRepository repository = new CommentRepositoryImpl();
         super.setRepository(repository);
