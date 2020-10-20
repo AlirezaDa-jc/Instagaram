@@ -46,6 +46,7 @@ class CommentRepositoryImplTest extends BaseRepositoryImpl<Comment,Long> {
         comment.setComment("comment");
         comment.setUser(user);
         comment.setPost(firstPost);
+        postRepository.saveOrUpdate(firstPost);
     }
 
     @Test

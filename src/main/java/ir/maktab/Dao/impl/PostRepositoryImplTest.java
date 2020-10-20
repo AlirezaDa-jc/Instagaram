@@ -72,7 +72,7 @@ class PostRepositoryImplTest extends BaseRepositoryImpl<Post, Long> {
     @Order(3)
     @Test
     void testFindAll() {
-        assertEquals(9, postRepository.findAll().size());
+        assertEquals(6, postRepository.findAll().size());
     }
 
     @Order(6)
