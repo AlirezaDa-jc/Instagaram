@@ -1,8 +1,9 @@
-package ir.maktab.Dao.impl;
-
 import ir.maktab.Dao.CommentRepository;
 import ir.maktab.Dao.PostRepository;
 import ir.maktab.Dao.UserRepository;
+import ir.maktab.Dao.impl.CommentRepositoryImpl;
+import ir.maktab.Dao.impl.PostRepositoryImpl;
+import ir.maktab.Dao.impl.UserRepositoryImpl;
 import ir.maktab.base.repository.impl.BaseRepositoryImpl;
 import ir.maktab.domains.Comment;
 import ir.maktab.domains.Post;
@@ -13,16 +14,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 class CommentRepositoryImplTest extends BaseRepositoryImpl<Comment,Long> {
     private static PostRepository postRepository;
     private static User user;
     private static Post firstPost;
-    private static Post secondPost;
-    private static long id;
-    private List<Post> posts = new LinkedList<>();
     private static UserRepository userRepository;
     private static CommentRepository commentRepository;
     static Comment comment;

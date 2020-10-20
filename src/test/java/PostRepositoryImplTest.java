@@ -1,7 +1,7 @@
-package ir.maktab.Dao.impl;
-
 import ir.maktab.Dao.PostRepository;
 import ir.maktab.Dao.UserRepository;
+import ir.maktab.Dao.impl.PostRepositoryImpl;
+import ir.maktab.Dao.impl.UserRepositoryImpl;
 import ir.maktab.base.repository.impl.BaseRepositoryImpl;
 import ir.maktab.domains.Post;
 import ir.maktab.domains.User;

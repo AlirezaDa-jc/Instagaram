@@ -1,6 +1,5 @@
-package ir.maktab.Dao.impl;
-
 import ir.maktab.Dao.UserRepository;
+import ir.maktab.Dao.impl.UserRepositoryImpl;
 import ir.maktab.base.repository.impl.BaseRepositoryImpl;
 import ir.maktab.domains.User;
 import org.junit.jupiter.api.AfterAll;
